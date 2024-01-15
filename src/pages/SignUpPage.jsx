@@ -5,11 +5,11 @@ import { useState } from "react"
 import axios from "axios"
 
 export default function SignUpPage() {
-  const [form, setForm] = useState({name:"", email: "", password: "", confirmPassword: ""})
+  const [form, setForm] = useState({ name:"", email: "", password: "", confirmPassword: ""})
   const navegate = useNavigate()
 
 function handleForm(e) {
-  setForm({... form, [e.target.name] : e.target.value})
+  setForm({...form, [e.target.name]: e.target.value })
 }
 
 function submitForm(e) {
