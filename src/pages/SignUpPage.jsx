@@ -21,7 +21,7 @@ function submitForm(e) {
   delete form.confirmPassword
   axios.post(`${import.meta.env.VITE_API_URL}/sign-up`, form)
   .then( res => navegate("/"))
-  .catch( error => alert(error.response.message) )
+  .catch( error => console.log(error.response) )
 
 }
 
