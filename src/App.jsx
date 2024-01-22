@@ -8,8 +8,8 @@ import Usercontext from "./contexts/Usercontext"
 import { useState } from "react"
 
 export default function App() {
-const [token, setToken] = useState(undefined)
-const [profileName, setprofileName] = useState(undefined)
+const [token, setToken] = useState(localStorage.getItem("token"))
+const [profileName, setprofileName] = useState(localStorage.getItem("profileName"))
 
   return (
     <PagesContainer>

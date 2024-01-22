@@ -1,34 +1,21 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo";
-import axios from "axios";
 import { useState } from "react";
-import { useContext } from "react";
-import Usercontext from "../contexts/Usercontext";
+import { useQuickIn } from "../hooks/useQuickIn";
+import { useSignIn} from "../services/user";
+import useForm from "../hooks/useForm";
 
 export default function SignInPage() {
-  const { setToken, setUsername} = useContext(Usercontext)
+  const { form, handleForm } = useForm({ email: "", password: "" })
+  const login = useSignIn()
+  useQuickIn()
 
-
-  const [form, setForm] = useState({ email: "", password: "" });
-  const navigate = useNavigate();
-
-  function handleForm(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
 
   function submitForm(e) {
     e.preventDefault();
 
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/sign-in`, form)
-      .then((res) => {
-        setToken(res.data.token)
-        setUsername(res.data.profileName)
-        console.log(res.data)
-        navigate("/home")
-      })
-      .catch((error) => console.log(error.data));
+    login(form)
   }
   return (
     <SingInContainer>

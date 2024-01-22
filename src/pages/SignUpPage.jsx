@@ -1,16 +1,15 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import MyWalletLogo from "../components/MyWalletLogo"
-import { useState } from "react"
-import axios from "axios"
+import { useQuickIn } from "../hooks/useQuickIn"
+import useForm from "../hooks/useForm"
+import {useSignUp} from "../services/user"
 
 export default function SignUpPage() {
-  const [form, setForm] = useState({ name:"", email: "", password: "", confirmPassword: ""})
-  const navigate = useNavigate()
+  const { form, handleForm } = useForm({ name:"", email: "", password: "", confirmPassword: ""})
+  useQuickIn()
+  const signUp = useSignUp()
 
-function handleForm(e) {
-  setForm({...form, [e.target.name]: e.target.value })
-}
 
 function submitForm(e) {
   e.preventDefault()
@@ -19,9 +18,7 @@ function submitForm(e) {
    return alert("senhas não batem")
   }
   delete form.confirmPassword
-  axios.post(`${import.meta.env.VITE_API_URL}/sign-up`, form)
-  .then( res => navigate("/"))
-  .catch( error => console.log(error.data) )
+  signUp(form)
 
 }
 
