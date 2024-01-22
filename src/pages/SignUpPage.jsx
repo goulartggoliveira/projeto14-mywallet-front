@@ -6,7 +6,7 @@ import axios from "axios"
 
 export default function SignUpPage() {
   const [form, setForm] = useState({ name:"", email: "", password: "", confirmPassword: ""})
-  const navegate = useNavigate()
+  const navigate = useNavigate()
 
 function handleForm(e) {
   setForm({...form, [e.target.name]: e.target.value })
@@ -20,8 +20,8 @@ function submitForm(e) {
   }
   delete form.confirmPassword
   axios.post(`${import.meta.env.VITE_API_URL}/sign-up`, form)
-  .then( res => navegate("/"))
-  .catch( error => console.log(error.response) )
+  .then( res => navigate("/"))
+  .catch( error => console.log(error.data) )
 
 }
 
