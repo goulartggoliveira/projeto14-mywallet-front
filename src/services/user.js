@@ -3,34 +3,50 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Usercontext from "../contexts/Usercontext";
 
+export function useSignUp() {
+  const navigate = useNavigate();
 
-export function useSignUp(){
-    const navigate = useNavigate()
-
-    return (body) => {
-
-    axios.post(`${import.meta.env.VITE_API_URL}/sign-up`, body)
-  .then( res => navigate("/"))
-  .catch( error => console.log(error.data) )
-    }
+  return (body) => {
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/sign-up`, body)
+      .then((res) => navigate("/"))
+      .catch((error) => console.log(error.data));
+  };
 }
 
-export function useSignIn(){
-    const navigate = useNavigate();
-    const { setToken, setprofileName} = useContext(Usercontext)
+export function useSignIn() {
+  const navigate = useNavigate();
+  const { setToken, setprofileName } = useContext(Usercontext);
 
-    return (body) => {
-
+  return (body) => {
     axios
       .post(`${import.meta.env.VITE_API_URL}/sign-in`, body)
       .then((res) => {
-        setToken(res.data.token)
-        setprofileName(res.data.profileName)
-        localStorage.setItem("token", res.data.token)
-        localStorage.setItem("profileName", res.data.profileName )
-        console.log(res.data)
-        navigate("/home")
+        setToken(res.data.token);
+        setprofileName(res.data.profileName);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("profileName", res.data.profileName);
+        console.log(res.data);
+        navigate("/home");
       })
       .catch((error) => console.log(error.data));
-    }
-    }
+  };
+}
+
+export function useLogOut() {
+  const { token, setToken, setprofileName } = useContext(Usercontext);
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const navigate = useNavigate();
+
+  return () => {
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/sign-out`, {}, config)
+      .then(() => {
+        setToken(undefined);
+        setprofileName(undefined);
+        localStorage.clear();
+        navigate("/");
+      })
+      .catch((error) => alert(error.data));
+  };
+}

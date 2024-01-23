@@ -2,41 +2,38 @@ import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useQuickOut } from "../hooks/useQuickOut"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import Usercontext from "../contexts/Usercontext"
+import { useLogOut } from "../services/user"
+import TransactionItem from "../components/Walletitens"
+import { Oval } from "react-loader-spinner"
+import { getwallet } from "../services/wallet"
 
 
 export default function HomePage() {
   const { profileName } = useContext(Usercontext)
-
+  const logout = useLogOut()
   useQuickOut()  
-
+  const wallet = getwallet()
+  
 
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, {profileName}</h1>
-        <BiExit />
+        <BiExit onClick={logout} data-test="logout"/>
       </Header>
 
       <TransactionsContainer>
+        {!wallet && <Oval />}
+        {wallet && wallet.length == 0 && <>Não há registros</>}
+        {wallet && wallet.length > 0 && (
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {wallet.map((w) => <TransactionItem  key={w._id} wallet={w}/>)}
         </ul>
+
+
+        )}
 
         <article>
           <strong>Saldo</strong>
@@ -86,6 +83,7 @@ const TransactionsContainer = styled.article`
   article {
     display: flex;
     justify-content: space-between;   
+    padding-top: 10px;
     strong {
       font-weight: 700;
       text-transform: uppercase;
